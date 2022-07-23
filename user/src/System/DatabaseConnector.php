@@ -1,15 +1,16 @@
 <?php
 
+namespace App\System;
+
+require_once 'rb-mysql.php';
+
 // This class holds our database connection and adds the initialization of the connection 
 // to our bootstrap.php file
 
-namespace App\System;
 
 class DatabaseConnector
 {
-    private $dbConnection = null;
-
-    public function __construct()
+    public static function setup()
     {
         $host = $_ENV['DB_HOST'];
         $port = $_ENV['DB_PORT'];
@@ -18,18 +19,9 @@ class DatabaseConnector
         $pass = $_ENV['DB_PASSWORD'];
 
         try {
-            $this->dbConnection = new \PDO(
-                "mysql:host=$host;port=$port;charset=utf8mb4;dbname=$db",
-                $user,
-                $pass
-            );
-        } catch (\PDOException $e) {
+            return \R::setup("mysql:host=$host;port=$port;charset=utf8mb4;dbname=$db", $user,  $pass);
+        } catch (\Exception $e) {
             exit($e->getMessage());
         }
-    }
-
-    public function getConnection()
-    {
-        return $this->dbConnection;
     }
 }

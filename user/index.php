@@ -1,7 +1,8 @@
 <?php
 
-require 'bootstrap.php';
-use App\Controller\personController;
+require_once 'bootstrap.php';
+use App\Controller\UserController;
+use App\System\ApiResponse;
 
 // setting header
 
@@ -15,22 +16,24 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
 // var_dump($uri);
 
-// all of our endpoints start with /person
+
+// all of our endpoints start with either /student or /manager
 // everything else results in a 404 Not Found
-if ($uri[2] !== 'person') {
-    header("HTTP/1.1 404 Not Found");
+$service = $uri[3];
+if ($service !== 'student' && $service !== 'manager') {
+    ApiResponse::code(404);
     exit();
 }
 
 // the user id is, of course, optional and must be a number:
 $userId = null;
-if (isset($uri[3])) {
-    $userId = (int) $uri[3];
+if (isset($uri[4])) {
+    $userId = (int) $uri[4];
 }
-
+// echo "user id " .$userId;
 $requestMethod = $_SERVER["REQUEST_METHOD"];
 
-// pass the request method and user ID to the PersonController and process the HTTP request:
-$controller = new PersonController($dbConnection, $requestMethod, $userId);
+// pass the request method and user ID to the UserController and process the HTTP request:
+$controller = new UserController($requestMethod, $service,  $userId);
 $controller->processRequest();
 
