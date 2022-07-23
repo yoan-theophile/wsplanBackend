@@ -12,6 +12,12 @@ header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
+if (!isset($_SERVER['REQUEST_METHOD']) || !isset($_SERVER['REQUEST_URI'])) {
+    ApiResponse::code(400);
+    exit();
+}
+
+$requestMethod = $_SERVER["REQUEST_METHOD"];
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
 // var_dump($uri);
@@ -30,8 +36,7 @@ $userId = null;
 if (isset($uri[4])) {
     $userId = (int) $uri[4];
 }
-// echo "user id " .$userId;
-$requestMethod = $_SERVER["REQUEST_METHOD"];
+
 
 // pass the request method and user ID to the UserController and process the HTTP request:
 $controller = new UserController($requestMethod, $service,  $userId);

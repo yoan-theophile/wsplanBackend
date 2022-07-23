@@ -14,10 +14,13 @@ class ApiResponse
                 header("HTTP/1.1 201 Created");
                 break;
             case 400:
-                header("HTTP/1.1 Bad Request");
+                header("HTTP/1.1 400 Bad Request");
                 break;
             case 401:
                 header("HTTP/1.1 401 Unauthorized");
+                break;
+            case 403:
+                header("HTTP/1.1 403 Method Not Allowed");
                 break;
             case 422:
                 header("HTTP/1.1 422 Unprocessable Entity");

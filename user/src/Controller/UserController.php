@@ -37,7 +37,7 @@ class UserController
                 break;
 
             default:
-                $this->notFoundResponse();
+                $this->notAllowedResponse();
                 break;
         }
     }
@@ -140,6 +140,11 @@ class UserController
     private function notFoundResponse()
     {
         ApiResponse::respond(404, null);
+    }
+
+    private function notAllowedResponse()
+    {
+        ApiResponse::respond(403, null);
     }
 
     private function unprocessableEntityResponse()
